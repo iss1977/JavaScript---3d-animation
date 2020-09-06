@@ -1,4 +1,4 @@
-var W = 600 , H = 600;
+var W = 400 , H = 400;
 var STEP = 0.3; // frecvency of the points rendered in the cube ( used only in initGeometry()...)
 var MODEL_MIN_X = -1, MODEL_MAX_X = 1;
 var MODEL_MIN_Y = -1, MODEL_MAX_Y = 1;
@@ -62,9 +62,9 @@ function renderPoint(point) {
         y=projectedPoint[1];
       
 
-    var linewidthmy=2+3-3*(distanceFromScreen+5)/15
+    var linewidthmy=1+3-3*(distanceFromScreen+5)/15
     
-    ctx.lineWidth =20-distanceFromScreen;//-(point[2]+0.5)*5;
+    ctx.lineWidth =10-distanceFromScreen;//-(point[2]+0.5)*5;
     //console.log(point[2]);
     ctx.strokeStyle="white";
     ctx.lineCap = "round";
@@ -74,7 +74,7 @@ function renderPoint(point) {
 
     ctx.beginPath();
     ctx.moveTo(x,y);
-    ctx.lineTo(x+linewidthmy,y+linewidthmy);
+    ctx.lineTo(x+2,y+2);
     ctx.closePath();
     ctx.stroke();
 
@@ -108,13 +108,20 @@ function rotateX(point, angle){
 
 
 var angle = 0;
-var delta_angle = 0.03;
+var delta_angle = 0.01;
+var delta_delta_angle = 0.0005;
 
 function render(){
     ctx.fillStyle="black";
     ctx.fillRect(0,0,W, H);
 
+    delta_angle+=delta_delta_angle;
+    if (delta_angle>0.08) delta_delta_angle*=(-1);
+    if (delta_angle<0.01) delta_delta_angle*=(-1);
+
     angle += delta_angle ;
+
+    
     points.forEach((point)=> {
         point = rotateY(point, angle);
         point = rotateX(point, angle/5);
