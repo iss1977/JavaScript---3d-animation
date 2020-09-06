@@ -116,7 +116,7 @@ function render(){
     ctx.fillRect(0,0,W, H);
 
     delta_angle+=delta_delta_angle;
-    if (delta_angle>0.08) delta_delta_angle*=(-1);
+    if (delta_angle>0.06) delta_delta_angle*=(-1);
     if (delta_angle<0.01) delta_delta_angle*=(-1);
 
     angle += delta_angle ;
@@ -124,7 +124,7 @@ function render(){
     
     points.forEach((point)=> {
         point = rotateY(point, angle);
-        point = rotateX(point, angle/5);
+        point = rotateX(point, angle/(5-delta_angle*2));
         renderPoint(point);
     });
 
