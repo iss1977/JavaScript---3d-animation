@@ -26,13 +26,26 @@ function perspectiveProjection(point){
         z=point[2];
 
         return [
-            x / ( z +2  ),
-            y / ( z +2  ) 
+            x / ( z + 2  ),
+            y / ( z + 2  ) 
         ]
 }
 
+var distanceFromScreen = 5;
+var delta_distanceFromScreen = -0.0001;
+
+
+
+
 // moving the origin of the coordinate system and scaling up. The cube in the model is 2 units width and height, from -1 to +1. Move it to the edge of the cube.
 function project(point){
+    // adding z animation before projection
+    distanceFromScreen+=delta_distanceFromScreen;
+    point[2]+=distanceFromScreen;
+
+    if (distanceFromScreen < -5) delta_distanceFromScreen*=(-1);
+    if (distanceFromScreen > 10) delta_distanceFromScreen*=(-1);
+
     var perspectivePoint = perspectiveProjection(point);
     var x= perspectivePoint[0],
         y=perspectivePoint[1];
@@ -48,16 +61,20 @@ function renderPoint(point) {
     var x= projectedPoint[0],
         y=projectedPoint[1];
       
+
+    var linewidthmy=2+3-3*(distanceFromScreen+5)/15
     
-    ctx.lineWidth =10-(point[2]+0.5)*10;
+    ctx.lineWidth =20-distanceFromScreen;//-(point[2]+0.5)*5;
     //console.log(point[2]);
     ctx.strokeStyle="white";
     ctx.lineCap = "round";
 
 
+   
+
     ctx.beginPath();
     ctx.moveTo(x,y);
-    ctx.lineTo(x+5,y+5);
+    ctx.lineTo(x+linewidthmy,y+linewidthmy);
     ctx.closePath();
     ctx.stroke();
 
@@ -100,7 +117,7 @@ function render(){
     angle += delta_angle ;
     points.forEach((point)=> {
         point = rotateY(point, angle);
-        point = rotateX(point, angle/3);
+        point = rotateX(point, angle/5);
         renderPoint(point);
     });
 
